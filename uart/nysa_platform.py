@@ -61,7 +61,9 @@ class UartPlatform(Platform):
             NysaError: An error occured when scanning for devices
 
         """
-        raise AssertionError("%s not implemented" % sys._getframe().f_code.co_name)
+        inst_dict = {}
+        if self.status: self.status.Warning("Scan function not implemented yet!")
+        return inst_dict
 
     def test_build_tools(self):
         """
@@ -78,12 +80,8 @@ class UartPlatform(Platform):
         Raises:
             NysaError: An error occured when scanning for the build tools
         """
-        raise AssertionError("%s not implemented" % sys._getframe().f_code.co_name)
-        '''
-        Although Nysa can be used with Altera the following two lines can be used
-        for determining if Xilinx is installed on this platform
+        if self.status: self.status.Warning("Build tool is set to Xilinx, this can be modified in the board specific 'nysa_platform.py' script")
 
         if find_xilinx_path() is None:
             return False
         return True
-        '''
