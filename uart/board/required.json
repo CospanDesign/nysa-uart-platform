@@ -1,0 +1,35 @@
+{
+    "BASE_DIR":"~/projects/ibuilder_project",
+    "board":"uart",
+    "PROJECT_NAME":"example_project",
+    "TEMPLATE":"wishbone_template.json",
+    "INTERFACE":{
+      "file":"uart_io_handler.v",
+      "bind":{
+        "i_phy_uart_in":{
+          "direction":"input",
+          "loc":"uart_rx"
+        },
+        "o_phy_uart_out":{
+          "direction":"output",
+          "loc":"uart_tx"
+        }
+      }
+    },
+    "SLAVES":{
+    },
+    "MEMORY":{
+    },
+    "bind":{
+        "clk":{
+            "direction":"input",
+            "loc":"clk"
+        },
+        "rst":{
+            "direction":"input",
+            "loc":"rst"
+        }
+    },
+    "constraint_files":[
+    ]
+}

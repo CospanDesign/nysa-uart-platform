@@ -1,0 +1,35 @@
+{
+    "BASE_DIR":"~/projects/ibuilder_project",
+    "board":"uart",
+    "PROJECT_NAME":"example_project",
+    "SLAVES":{
+      "gpio1":{
+        "filename":"wb_gpio.v",
+        "bind":{
+          "gpio_in[7:4]":{
+            "loc":"i_button[3:0]",
+            "direction":"input"
+          },
+          "gpio_in[9:8]":{
+            "loc":"i_switch[1:0]",
+            "direction":"input"
+          }
+        }
+      }
+    },
+    "MEMORY":{
+      "bram":{
+        "filename":"wb_bram.v"
+      }
+    },
+    "bind":{
+        "clk":{
+            "direction":"input",
+            "loc":"clk"
+        },
+        "rst":{
+            "direction":"input",
+            "loc":"rst"
+        }
+    }
+}
