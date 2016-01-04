@@ -1,15 +1,31 @@
 {
     "board_name":"uart",
     "vendor":"Cospan Design",
-    "build_tool":"nothing",
-    "fpga_part_number":"your imagination",
+    "build_tool":"xilinx",
+    "clockrate":100000000,
+    "fpga_part_number":"XC7A200T-fbg676-1",
     "host_inteface":"uart_interface",
     "default_constraint_files":[
+        "constraints.ucf"
         ],
     "image":"",
-    "clockrate":50000000,
-    "default_project":"",
-    "invert_reset":false,
+    "default_project":"default.json",
+    "invert_reset":true,
     "build_flags":{
-    }
+        "xst":{
+          "flags":{
+            "-sd":"{cores}",
+            "-netlist_hierarchy":"rebuilt"
+          }
+        },
+        "map":{
+            "flags":{
+                "-convert_bram8":""
+            }
+        },
+        "bitmap":{
+          "ConfigRate":"50"
+        }
+    },
+    "required":"required.json"
 }

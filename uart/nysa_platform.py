@@ -29,6 +29,7 @@ import os
 import glob
 import json
 import hashlib
+import serial
 
 
 from nysa.host.nysa_platform import Platform
@@ -61,9 +62,29 @@ class UartPlatform(Platform):
             NysaError: An error occured when scanning for devices
 
         """
-        inst_dict = {}
-        if self.status: self.status.Warning("Scan function not implemented yet!")
-        return inst_dict
+        #if self.status: self.status.Warning("Scan function not implemented yet!")
+        if sys.platform.startswith("win"):
+            ports = ['COM%s' % (i + 1) for i in range(256)]
+
+        elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
+            # this excludes your current terminal "/dev/tty"
+            ports = glob.glob('/dev/tty[A-Za-z]*')
+        elif sys.platform.startswith('darwin'):
+            ports = glob.glob('/dev/tty.*')
+        else:
+            raise EnvironmentError('Unsupported platform')
+
+        result = []
+        for port in ports:
+            try:
+                s = serial.Serial(port)
+                s.close()
+                result.append(port)
+                self.add_device_dict(port, Uart(port, self.status))
+            except (OSError, serial.SerialException):
+                pass
+
+        return self.dev_dict
 
     def test_build_tools(self):
         """
