@@ -17,6 +17,8 @@ from nysa.host.nysa import Nysa
 from nysa.host.nysa import NysaError
 from nysa.host.nysa import NysaCommError
 
+BAUDRATE = 115200
+
 class Uart(Nysa):
 
     def __init__(self, dev_dict, status = None):
@@ -47,9 +49,11 @@ class Uart(Nysa):
         Raises:
             NysaCommError: When a failure of communication is detected
         """
-	read_cmd = "L%0.7X00000002%0.8X00000000"
-	read_cmd = (read_cmd) % (length, address)
-        read_rsp = self.ser.read(32 + (length * 8))
+	    read_cmd = "L%0.7X00000002%0.8X00000000"
+	    read_cmd = read_cmd % (length, address)
+
+        self.ser.write(read_cmd)
+        read_rsp = self.ser.read(24 + (length * 8))
         response = []
         if len(read_resp) > 0:
             for i in range(0, length + 1):
@@ -73,11 +77,13 @@ class Uart(Nysa):
             AssertionError: This function must be overriden by a board specific
                 implementation
         """
-        if not isinstance (data, list):
-            data = [data]
-        length = len(data) - 1
+        length = (len(data) / 4)
         write_cmd = "L%0.7X00000001%0.8X"
-        write_cmd = (write_cmd) % (length, address)
+        write_cmd = write_cmd % (length, address)
+        for d in data:
+            write_cmd += "%X" % ((d >> 4) & 0xF)
+            write_cmd += "%X" % (d & 0xF)
+ 
         self.ser.flushInput()
         self.ser.write(write_cmd)
         write_rsp = self.ser.read(32)
