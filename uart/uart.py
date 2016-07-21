@@ -21,12 +21,11 @@ BAUDRATE = 115200
 
 class Uart(Nysa):
 
-    def __init__(self, dev_dict, status = None):
+    def __init__(self, path, status = None):
         Nysa.__init__(self, status)
-        self.dev_dict = dev_dict
-        dev_name = dev_dict["serial"]
+        ser_path = path
         baudrate = 115200
-        self.ser = serial.Serial(dev_name, baudrate)
+        self.ser = serial.Serial(path, baudrate)
         self.ser.timeout = 2
         self.ser.flushInput()
         if self.ser == None:
@@ -49,15 +48,19 @@ class Uart(Nysa):
         Raises:
             NysaCommError: When a failure of communication is detected
         """
-	    read_cmd = "L%0.7X00000002%0.8X00000000"
-	    read_cmd = read_cmd % (length, address)
-
+        read_cmd = "L%07X00000002%08X00000000"
+        read_cmd = (read_cmd) % (length, address)
+        self.ser.flushInput()
         self.ser.write(read_cmd)
-        read_rsp = self.ser.read(24 + (length * 8))
-        response = []
-        if len(read_resp) > 0:
-            for i in range(0, length + 1):
-	        response.append(string.atoi(read_resp[(24 + (i * 8)):(32 + (i * 8))], 16))
+        read_resp = self.ser.read(24 + ((length) * 8))
+        response = Array('B')
+        d = read_resp[24:]
+
+        for i in range (0, len(d), 2):
+            v = int(d[i], 16) << 4
+            v |= int(d[i + 1], 16)
+            response.append(v)
+
         return response
 
     def write(self, address, data, disable_auto_inc = False):
@@ -137,7 +140,8 @@ class Uart(Nysa):
         Raises:
             NysaCommError: A failure of communication is detected
         """
-        raise AssertionError("%s not implemented" % sys._getframe().f_code.co_name)
+        self.s.Warning("UART Interface does not report %s" % sys._getframe().f_code.co_name)
+        return True
 
     def get_sdb_base_address(self):
         """
@@ -191,10 +195,7 @@ class Uart(Nysa):
         Raises:
             Nothing
         """
-        temp_timeout = self.ser.timeout
-        self.ser.timeout = wait_time
         temp_string = self.ser.read(32)
-        self.ser.timeout = temp_timeout
         if len(temp_string) == 0:
             return False
         self.interrupt_address = string.atoi(temp_string[16:24], 16)
@@ -238,8 +239,8 @@ class Uart(Nysa):
             AssertionError:
                 Not Implemented
         """
-
-        raise AssertionError("%s not implemented" % sys._getframe().f_code.co_name)
+        self.s.Warning("UART Interface does not report %s" % sys._getframe().f_code.co_name)
+        #raise AssertionError("%s not implemented" % sys._getframe().f_code.co_name)
 
     def program (self):
         """
@@ -256,7 +257,8 @@ class Uart(Nysa):
             AssertionError:
                 Not Implemented
         """
-        raise AssertionError("%s not implemented" % sys._getframe().f_code.co_name)
+        self.s.Warning("UART Interface does not report %s" % sys._getframe().f_code.co_name)
+        #raise AssertionError("%s not implemented" % sys._getframe().f_code.co_name)
 
     def ioctl(self, name, arg = None):
         """
@@ -280,6 +282,7 @@ class Uart(Nysa):
         """
 
         raise AssertionError("%s not implemented" % sys._getframe().f_code.co_name)
+
 
     def list_ioctl(self):
         """

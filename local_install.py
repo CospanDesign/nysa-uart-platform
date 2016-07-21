@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/env python
 
 # Copyright (c) 2015 Dave McCoy (dave.mccoy@cospandesign.com)
 #
