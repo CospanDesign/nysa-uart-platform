@@ -61,8 +61,15 @@ class UartPlatform(Platform):
             NysaError: An error occured when scanning for devices
 
         """
+        self.status.Verbose("Scanning")
         inst_dict = {}
-        if self.status: self.status.Warning("Scan function not implemented yet!")
+        devs = os.listdir("/dev")
+        for d in devs:
+            if "ttyUSB" in d:
+                path = os.path.join(os.path.sep, "dev", d)
+                inst_dict[os.path.split(d)[1]] = Uart(path)
+
+        #if self.status: self.status.Warning("Scan function not implemented yet!")
         return inst_dict
 
     def test_build_tools(self):
