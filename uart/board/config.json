@@ -1,15 +1,17 @@
 {
-    "board_name":"uart",
-    "vendor":"Cospan Design",
-    "build_tool":"nothing",
-    "fpga_part_number":"your imagination",
-    "host_inteface":"uart_interface",
-    "default_constraint_files":[
-        ],
-    "image":"",
-    "clockrate":50000000,
-    "default_project":"",
-    "invert_reset":false,
-    "build_flags":{
-    }
+  "board_name":"uart",
+  "vendor":"Cospan Design",
+  "build_tool":"xilinx",
+  "fpga_part_number":"xc6slx9-tqg144-3",
+  "host_inteface":"uart_interface",
+  "default_project":"default.json",
+  "default_constraint_files":[
+    "constraints.json"
+  ],
+  "image":"",
+  "clockrate":50000000,
+  "invert_reset":true,
+  "build_flags":{
+  },
+  "required":"required.json"
 }
